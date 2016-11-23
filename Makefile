@@ -6,7 +6,7 @@
 #    By: jcarra <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/21 10:14:19 by jcarra            #+#    #+#              #
-#    Updated: 2016/11/23 13:46:48 by jcarra           ###   ########.fr        #
+#    Updated: 2016/11/23 19:35:02 by jcarra           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,7 +28,7 @@ SRCS		=	$(SRC:%=$(DIRSRC)%)
 OBJS		=	$(SRC:.c=.o)
 LIBS		=	$(LIB:%=$(DIRLIB)%)
 
-CFLAGS		=	-Wall -Wextra -Werror -I./$(DIRINC) -I./$(DIRLIB)$(DIRINC)
+CFLAGS		=	-Wall -Wextra -Werror -I./$(DIRINC) -I./$(DIRLIB)$(DIRINC) -g3
 
 CC			=	gcc
 RM			=	rm -f
@@ -41,7 +41,7 @@ all		:		$(NAME)
 $(NAME)	:
 				@$(MAKE) $(DIRLIB)
 				@$(CC) $(CFLAGS) -c $(SRCS)
-				@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+				@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 				@$(ECHO) '\033[32m> Compiled\n\033[0m'
 
 clean	:

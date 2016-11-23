@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:35:43 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 10:43:41 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/23 18:54:47 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			main()
 {
-	if (LENGHT > 1 && WEIGHT > 1 && (DENSITY > 0 && DENSITY < 100))
+	if (LENGHT > 1 && WIDTH > 1 && (DENSITY > 0 && DENSITY < 100))
 	{
 		if (ft_demineur() == ERROR)
 			ft_putendl_fd(ERROR_T, 2);

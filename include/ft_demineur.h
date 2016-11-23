@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:36:05 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 13:49:20 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/23 19:01:44 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define EXPLO -5
 # define FLAG -6
 
+# define PROMPT "$> "
 # define ERROR_T "Erreur de traitement."
 # define USAGE "Commandes disponibles:\ndemin X Y\nCreuser sur la case pointer\
  par X/Y\ndrap X Y\nPose un drapeau sur la case X/Y"

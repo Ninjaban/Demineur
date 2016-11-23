@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:43:45 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 13:48:03 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/23 20:01:32 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ int			ft_demineur(void)
 	if (ft_createmap(&map) == ERROR)
 		return (ERROR);
 	/* Code */
+	ft_displaymap(map);
 	while (42)
 	{
+		ft_putstr(PROMPT);
 		if (get_next_line(0, &line) == -1)
 		{
 			ft_freemap(map);
@@ -32,12 +34,15 @@ int			ft_demineur(void)
 		if (ft_parsing(&cmd, line) != ERROR)
 		{
 			if (ft_algo(cmd, &map) == TRUE)
+			{
+				ft_freemap(map);
+				free(cmd);
 				return (TRUE);
+			}
 		}
 		else
 			ft_putendl(USAGE);
 	}
 	/* !Code */
-	ft_freemap(map);
 	return (TRUE);
 }

@@ -6,11 +6,24 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 12:28:37 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 13:05:02 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/23 20:42:30 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_demineur.h"
+
+void		ft_free_tab(char **tab)
+{
+	int		n;
+
+	n = 0;
+	if (tab)
+	{
+		while (tab[n])
+			free(tab[n++]);
+		free(tab);
+	}
+}
 
 static int	ft_init(t_cmd **cmd, char *line)
 {
@@ -20,11 +33,12 @@ static int	ft_init(t_cmd **cmd, char *line)
 		return (ERROR);
 	if (!tab[0] || !tab[1] || !tab[2])
 		return (ERROR);
-	(*cmd)->demin = (ft_strncmp(tab[0], "demin", 4) == 0) ? MINE : FALSE;
+	(*cmd)->demin = (ft_strncmp(tab[0], "demin", 4) == 0) ? TRUE : FALSE;
 	if (((*cmd)->demin == FALSE) && (ft_strncmp(tab[0], "drap", 3) != 0))
 		return (ERROR);
 	(*cmd)->x = ft_atoi(tab[1]);
 	(*cmd)->y = ft_atoi(tab[2]);
+	ft_free_tab(tab);
 	return (TRUE);
 }
 
