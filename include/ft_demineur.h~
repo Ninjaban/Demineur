@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:36:05 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/24 12:14:22 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:51:25 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define LENGHT 10
 # define WIDTH 10
-# define DENSITY 5
+# define DENSITY 20
 
 # define TRUE 1
 # define FALSE 0

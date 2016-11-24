@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/24 10:55:15 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/24 12:13:13 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:57:00 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void		ft_display(t_map *map)
 				ft_putchar('#');
 			else if (map->mine[y][x] == MINE)
 				ft_putchar('X');
-			else if (map->mine[y][x] == 0)
-				ft_putchar(' ');
 			else
 				ft_putchar(map->mine[y][x] + '0');
 			x = x + 1;
