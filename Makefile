@@ -6,7 +6,7 @@
 #    By: jcarra <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/21 10:14:19 by jcarra            #+#    #+#              #
-#    Updated: 2016/11/23 19:35:02 by jcarra           ###   ########.fr        #
+#    Updated: 2016/11/24 11:52:47 by jcarra           ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -16,7 +16,8 @@ SRC			=	ft_main.c \
 				ft_parsing.c \
 				ft_algo.c \
 				ft_demineur.c \
-				ft_map.c
+				ft_struct.c \
+				ft_display.c
 
 LIB			=	libft.a
 

@@ -6,111 +6,143 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 12:46:22 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 21:27:40 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:49:29 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_demineur.h"
 
-static int	ft_end(t_bool **map, int ret)
+static int	ft_check_mine(t_map **map, int x, int y)
 {
-	ft_displaymap(map);
-	if (ret == TRUE)
-		ft_putendl("Vous avez gagnee!");
-	else
-		ft_putendl("Vous avez perdu!");
+	if (x < 0 || x >= LENGHT || y < 0 || y >= WIDTH)
+		return (FALSE);
+	if ((*map)->mine[y][x] == 0)
+		return (FALSE);
 	return (TRUE);
 }
 
-static int	ft_demin(t_bool ***map, int x, int y, t_bool first)
+static void	ft_demin_rec(t_map **map, int x, int y)
 {
-	int		ret;
-
-	if (y >= WIDTH || y < 0 || x >= LENGHT || x < 0)
-		return (FALSE);
-	if ((*map)[y][x] == DISCOVER)
-		return (FALSE);
-	if (((*map)[y][x] == MINE  || (*map)[y][x] == EXPLO) && first == TRUE)
-	{
-		(*map)[y][x] = EXPLO;
-		return (ERROR);
-	}
-	else if ((*map)[y][x] == MINE || (*map)[y][x] == EXPLO)
-		return (TRUE);
-	if ((*map)[y][x] == HIDE)
-		(*map)[y][x] = DISCOVER;
-	ret = 0;
-	ret = ret + ft_demin(&(*map), x + 1, y, FALSE - ret);
-	ret = ret + ft_demin(&(*map), x - 1, y, FALSE - ret);
-	ret = ret + ft_demin(&(*map), x, y + 1, FALSE - ret);
-	//ret = ret + ft_demin(&(*map), x, y - 1, FALSE - ret);
-	/*
-	ret = ret + ft_demin(&(*map), x - 1, y + 1, FALSE - ret);
-	ret = ret + ft_demin(&(*map), x + 1, y + 1, FALSE - ret);
-	ret = ret + ft_demin(&(*map), x - 1, y - 1, FALSE - ret);
-	ret = ret + ft_demin(&(*map), x + 1, y - 1, FALSE - ret);
-	*/
-	if (ret > 0 && first >= 0)
-		(*map)[y][x] = ret;
-	else if (ret > 0)
-		(*map)[y][x] = HIDE;
-	return (FALSE);
+	ft_demin(&(*map), x - 1, y, (ft_check_mine(map, x - 1, y) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x + 1, y, (ft_check_mine(map, x + 1, y) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x, y - 1, (ft_check_mine(map, x, y - 1) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x, y + 1, (ft_check_mine(map, x, y + 1) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x - 1, y - 1, (ft_check_mine(map, x - 1, y - 1) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x + 1, y + 1, (ft_check_mine(map, x + 1, y + 1) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x + 1, y - 1, (ft_check_mine(map, x + 1, y - 1) == TRUE) ? FALSE - 1 : FALSE);
+	ft_demin(&(*map), x - 1, y + 1, (ft_check_mine(map, x - 1, y + 1) == TRUE) ? FALSE - 1 : FALSE);
 }
 
-static int	ft_discover(t_bool **map)
+int			ft_demin(t_map **map, int x, int y, char bool)
+{
+	if (x < 0 || x >= LENGHT || y < 0 || y >= WIDTH)
+		return ((bool == TRUE) ? ERROR : FALSE);
+	if ((*map)->flag[y][x] == TRUE)
+	{
+		ft_putendl("Un drapeau se trouve sur cette case.");
+		return (FALSE);
+	}
+	if ((*map)->mine[y][x] == MINE)
+	{
+		(*map)->hide[y][x] = (bool == TRUE) ? FALSE : (*map)->hide[y][x];
+		return ((bool == TRUE) ? DEF : FALSE);
+	}
+	if ((*map)->hide[y][x] == TRUE)
+		(*map)->hide[y][x] = (bool >= FALSE) ? FALSE : TRUE;
+	if (bool >= FALSE)
+		ft_demin_rec(&(*map), x, y);
+	return (TRUE);
+}
+
+static int	ft_discover_mine(t_map **map, int x, int y)
+{
+	char	bool;
+
+	bool = TRUE;
+	if (x - 1 >= 0)
+		bool = ((*map)->hide[y][x - 1] == FALSE || (*map)->mine[y][x - 1] == MINE) ? bool : FALSE;
+	if (x + 1 < LENGHT)
+		bool = ((*map)->hide[y][x + 1] == FALSE || (*map)->mine[y][x + 1] == MINE) ? bool : FALSE;
+	if (y - 1 >= 0)
+		bool = ((*map)->hide[y - 1][x] == FALSE || (*map)->mine[y - 1][x] == MINE) ? bool : FALSE;
+	if (y + 1 < WIDTH)
+		bool = ((*map)->hide[y + 1][x] == FALSE || (*map)->mine[y + 1][x] == MINE) ? bool : FALSE;
+	if (x - 1 >= 0 && y - 1 >= 0)
+		bool = ((*map)->hide[y - 1][x - 1] == FALSE || (*map)->mine[y - 1][x - 1] == MINE) ? bool : FALSE;
+	if (x + 1 < LENGHT && y - 1 >= 0)
+		bool = ((*map)->hide[y - 1][x + 1] == FALSE || (*map)->mine[y - 1][x + 1] == MINE) ? bool : FALSE;
+	if (y + 1 < WIDTH && x - 1 >= 0)
+		bool = ((*map)->hide[y + 1][x - 1] == FALSE || (*map)->mine[y + 1][x - 1] == MINE) ? bool : FALSE;
+	if (y + 1 < WIDTH && x + 1 < LENGHT)
+		bool = ((*map)->hide[y + 1][x + 1] == FALSE || (*map)->mine[y + 1][x + 1] == MINE) ? bool : FALSE;
+	return (bool);
+}
+
+static int	ft_discover(t_map **map)
 {
 	size_t	x;
 	size_t	y;
-	t_bool	end;
+	char	bool;
 
 	y = 0;
-	end = TRUE;
+	bool = TRUE;
 	while (y < WIDTH)
 	{
 		x = 0;
 		while (x < LENGHT)
-		{
-			if ((map[y][x] == MINE) &&
-				(x > 0 && map[y][x - 1] == DISCOVER) &&
-				(x + 1 < LENGHT && map[y][x + 1] == DISCOVER) &&
-				(y > 0 && map[y - 1][x] == DISCOVER) &&
-				(y + 1 < WIDTH && map[y + 1][x] == DISCOVER))
-				map[y][x] = EXPLO;
-			if (map[y][x++] == MINE)
-				end = FALSE;
-		}
+			if ((*map)->mine[y][x++] == MINE)
+				if (ft_discover_mine(&(*map), x - 1, y) == FALSE)
+					bool = FALSE;
 		y = y + 1;
 	}
-	return (end);
+	return (bool);
 }
 
-static int	ft_algo_demin(t_cmd *cmd, t_bool ***map)
+static int	ft_end(char bool)
+{
+	if (bool == TRUE)
+	{
+		ft_putendl("Vous avez gagnée!");
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+static int	ft_algo_demin(t_cmd *cmd, t_map **map)
 {
 	int		ret;
 
 	ret = ft_demin(&(*map), cmd->x, cmd->y, TRUE);
-	ft_displaymap(*map);
-	if (ret == FALSE)
-		if ((ret = ft_discover(*map)) == FALSE)
+	if (ret == DEF)
+	{
+		ft_putendl("Vous avez perdu!");
+		return (TRUE);
+	}
+	if (ret == ERROR)
+	{
+		ft_putendl("Cette position n'existe pas!");
+		return (FALSE);
+	}
+	if (ret == TRUE)
+		if ((ret = ft_discover(&(*map))) == FALSE)
 			return (FALSE);
-	return (ft_end(*map, ret));
+	return (ft_end(ret));
 }
 
-static void	ft_algo_drap(t_cmd *cmd, t_bool ***map)
+static void	ft_algo_drap(t_cmd *cmd, t_map **map)
 {
-	(*map)[cmd->y][cmd->x] = ((*map)[cmd->y][cmd->x] - FLAG == MINE ||
-							  (*map)[cmd->y][cmd->x] - FLAG == EXPLO ||
-							  (*map)[cmd->y][cmd->x] - FLAG == HIDE ||
-							  (*map)[cmd->y][cmd->x] - FLAG == DISCOVER) ?
-		(*map)[cmd->y][cmd->x] - FLAG : (*map)[cmd->y][cmd->x] + FLAG;
+	if (cmd->y < WIDTH && cmd->x < LENGHT)
+		(*map)->flag[cmd->y][cmd->x] = ((*map)->flag[cmd->y][cmd->x] == FALSE) ? TRUE : FALSE;
+	else
+		ft_putendl("Cette position n'existe pas!");
 }
 
-int			ft_algo(t_cmd *cmd, t_bool ***map)
+int			ft_algo(t_cmd *cmd, t_map **map)
 {
 	if (cmd->demin == TRUE)
 		return (ft_algo_demin(cmd, &(*map)));
 	else
 		ft_algo_drap(cmd, &(*map));
-	ft_displaymap(*map);
+	ft_display(*map);
 	return (FALSE);
 }

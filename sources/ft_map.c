@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 11:00:45 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 19:51:36 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:33:56 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,30 @@ void		ft_freemap(t_bool **map)
 	}
 }
 
-static int	ft_nbdigit(int nbr)
-{
-	int		nb;
 
-	nb = 0;
-	if (nbr == 0)
-		return (1);
-	while (nbr)
+
+t_bool		**ft_tabdup(t_bool **map)
+{
+	t_bool	**cpy;
+	size_t	y;
+	size_t	x;
+
+	if ((cpy = malloc(sizeof(t_bool *) * WIDTH)) == NULL)
+		return (NULL);
+	y = 0;
+	while (y < WIDTH)
 	{
-		nb = nb + 1;
-		nbr = nbr / 10;
+		if ((cpy[y] = malloc(sizeof(t_bool) * LENGHT)) == NULL)
+			return (NULL);
+		x = 0;
+		while (x < LENGHT)
+		{
+			cpy[y][x] = map[y][x];
+			x = x + 1;
+		}
+		y = y + 1;
 	}
-	return (nb);
-}
-
-static void	ft_putnbchar(char c, size_t nb)
-{
-	size_t	n;
-
-	n = 0;
-	while (++n <= nb)
-		ft_putchar(c);
+	return (cpy);
 }
 
 void		ft_displaymap(t_bool **map)
@@ -67,9 +69,7 @@ void		ft_displaymap(t_bool **map)
 		ft_putchar('|');
 		while (i < LENGHT)
 		{
-			if (map[n][i] == FLAG)
-				ft_putchar('O');
-			else if (map[n][i] == DISCOVER)
+			if (map[n][i] == DISCOVER)
 				ft_putchar(' ');
 			else if (map[n][i] == MINE)
 				ft_putchar('+');

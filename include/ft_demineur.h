@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:36:05 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 19:01:44 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:51:25 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@
 # define TRUE 1
 # define FALSE 0
 # define ERROR -1
-# define MINE -2
-# define HIDE -3
-# define DISCOVER -4
-# define EXPLO -5
-# define FLAG -6
+# define DEF -2
+# define MINE -5
 
 # define PROMPT "$> "
 # define ERROR_T "Erreur de traitement."
@@ -35,8 +32,6 @@
 # include <time.h>
 # include "libft.h"
 
-typedef char		t_bool;
-
 typedef struct		s_cmd
 {
 	int				demin;
@@ -44,11 +39,28 @@ typedef struct		s_cmd
 	size_t			y;
 }					t_cmd;
 
+typedef struct		s_map
+{
+	char			**mine;
+	char			**hide;
+	char			**flag;
+}					t_map;
+/*
 void		ft_freemap(t_bool **map);
 void		ft_displaymap(t_bool **map);
-int			ft_parsing(t_cmd **cmd, char *line);
-int			ft_demineur(void);
+t_bool		**ft_tabdup(t_bool **map);
+
+
 int			ft_createmap(t_bool ***map);
 int			ft_algo(t_cmd *cmd, t_bool ***map);
+int			ft_demin(t_bool ***map, int x, int y, t_bool first);
+*/
+void		ft_freemap(t_map *map);
+void		ft_display(t_map *map);
+int			ft_algo(t_cmd *cmd, t_map **map);
+int			ft_demin(t_map **map, int x, int y, char bool);
+int			ft_parsing(t_cmd **cmd, char *line);
+int			ft_demineur(void);
+t_map		*ft_init(void);
 
 #endif

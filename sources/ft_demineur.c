@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:43:45 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 20:01:32 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:42:42 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 int			ft_demineur(void)
 {
 	t_cmd	*cmd;
-	t_bool	**map;
+	t_map	*map;
 	char	*line;
 
 	cmd = NULL;
-	if (ft_createmap(&map) == ERROR)
+	if ((map = ft_init()) == NULL)
 		return (ERROR);
 	/* Code */
-	ft_displaymap(map);
+	ft_display(map);
 	while (42)
 	{
 		ft_putstr(PROMPT);

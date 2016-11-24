@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 12:28:37 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/23 20:42:30 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 11:52:00 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void		ft_free_tab(char **tab)
 	}
 }
 
-static int	ft_init(t_cmd **cmd, char *line)
+static int	ft_init_cmd(t_cmd **cmd, char *line)
 {
 	char	**tab;
 
@@ -50,7 +50,7 @@ int			ft_parsing(t_cmd **cmd, char *line)
 		free(*cmd);
 	if ((*cmd = malloc(sizeof(t_cmd))) == NULL)
 		return (ERROR);
-	if (ft_init(&(*cmd), line) == ERROR)
+	if (ft_init_cmd(&(*cmd), line) == ERROR)
 	{
 		free(*cmd);
 		return (ERROR);
