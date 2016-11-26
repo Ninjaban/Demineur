@@ -6,7 +6,7 @@
 /*   By: jcarra <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 10:43:45 by jcarra            #+#    #+#             */
-/*   Updated: 2016/11/24 11:42:42 by jcarra           ###   ########.fr       */
+/*   Updated: 2016/11/24 13:21:34 by jcarra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int			ft_demineur(int lvl)
 	while (42)
 	{
 		ft_putstr(PROMPT);
+		line = NULL;
 		if (get_next_line(0, &line) == -1)
 		{
 		  ft_freemap(map, lvl);
@@ -55,6 +56,8 @@ int			ft_demineur(int lvl)
 		}
 		else
 			ft_putendl(USAGE);
+		if (line)
+			free(line);
 	}
 	/* !Code */
 	return (TRUE);
