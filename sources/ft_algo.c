@@ -12,21 +12,21 @@
 
 #include "ft_demineur.h"
 
-static void	ft_demin_rec(t_map **map, int x, int y, char bool)
+static void	ft_demin_rec(t_map **map, int x, int y, char bool, int lvl)
 {
-	ft_demin(&(*map), x - 1, y, bool);
-	ft_demin(&(*map), x + 1, y, bool);
-	ft_demin(&(*map), x, y - 1, bool);
-	ft_demin(&(*map), x, y + 1, bool);
-	ft_demin(&(*map), x - 1, y - 1, bool);
-	ft_demin(&(*map), x + 1, y + 1, bool);
-	ft_demin(&(*map), x + 1, y - 1, bool);
-	ft_demin(&(*map), x - 1, y + 1, bool);
+  ft_demin(&(*map), x - 1, y, bool, lvl);
+  ft_demin(&(*map), x + 1, y, bool, lvl);
+  ft_demin(&(*map), x, y - 1, bool, lvl);
+  ft_demin(&(*map), x, y + 1, bool, lvl);
+  ft_demin(&(*map), x - 1, y - 1, bool, lvl);
+  ft_demin(&(*map), x + 1, y + 1, bool, lvl);
+  ft_demin(&(*map), x + 1, y - 1, bool, lvl);
+  ft_demin(&(*map), x - 1, y + 1, bool, lvl);
 }
 
-int			ft_demin(t_map **map, int x, int y, char bool)
+int			ft_demin(t_map **map, int x, int y, char bool, int lvl)
 {
-	if (x < 0 || x >= LENGHT || y < 0 || y >= WIDTH)
+  if (x < 0 || x >= (int)ft_getvalue(lvl, TRUE, FALSE) || y < 0 || y >= (int)ft_getvalue(lvl, FALSE, TRUE))
 		return ((bool == TRUE) ? ERROR : FALSE);
 	if ((*map)->flag[y][x] == TRUE)
 	{
@@ -43,35 +43,35 @@ int			ft_demin(t_map **map, int x, int y, char bool)
 	if ((*map)->hide[y][x] == TRUE)
 		(*map)->hide[y][x] = (bool >= FALSE) ? FALSE : TRUE;
 	if (bool >= FALSE)
-		ft_demin_rec(&(*map), x, y, ((*map)->mine[y][x] == 0) ? FALSE : FALSE - 1);
+	  ft_demin_rec(&(*map), x, y, ((*map)->mine[y][x] == 0) ? FALSE : FALSE - 1, lvl);
 	return (TRUE);
 }
 
-static int	ft_discover_mine(t_map **map, int x, int y)
+static int	ft_discover_mine(t_map **map, int x, int y, int lvl)
 {
 	char	bool;
 
 	bool = TRUE;
 	if (x - 1 >= 0)
 		bool = ((*map)->hide[y][x - 1] == FALSE || (*map)->mine[y][x - 1] == MINE) ? bool : FALSE;
-	if (x + 1 < LENGHT)
+	if (x + 1 < (int)ft_getvalue(lvl, TRUE, FALSE))
 		bool = ((*map)->hide[y][x + 1] == FALSE || (*map)->mine[y][x + 1] == MINE) ? bool : FALSE;
 	if (y - 1 >= 0)
 		bool = ((*map)->hide[y - 1][x] == FALSE || (*map)->mine[y - 1][x] == MINE) ? bool : FALSE;
-	if (y + 1 < WIDTH)
+	if (y + 1 < (int)ft_getvalue(lvl, FALSE, TRUE))
 		bool = ((*map)->hide[y + 1][x] == FALSE || (*map)->mine[y + 1][x] == MINE) ? bool : FALSE;
 	if (x - 1 >= 0 && y - 1 >= 0)
 		bool = ((*map)->hide[y - 1][x - 1] == FALSE || (*map)->mine[y - 1][x - 1] == MINE) ? bool : FALSE;
-	if (x + 1 < LENGHT && y - 1 >= 0)
+	if (x + 1 < (int)ft_getvalue(lvl, TRUE, FALSE) && y - 1 >= 0)
 		bool = ((*map)->hide[y - 1][x + 1] == FALSE || (*map)->mine[y - 1][x + 1] == MINE) ? bool : FALSE;
-	if (y + 1 < WIDTH && x - 1 >= 0)
+	if (y + 1 < (int)ft_getvalue(lvl, FALSE, TRUE) && x - 1 >= 0)
 		bool = ((*map)->hide[y + 1][x - 1] == FALSE || (*map)->mine[y + 1][x - 1] == MINE) ? bool : FALSE;
-	if (y + 1 < WIDTH && x + 1 < LENGHT)
+	if (y + 1 < (int)ft_getvalue(lvl, FALSE, TRUE) && x + 1 < (int)ft_getvalue(lvl, TRUE, FALSE))
 		bool = ((*map)->hide[y + 1][x + 1] == FALSE || (*map)->mine[y + 1][x + 1] == MINE) ? bool : FALSE;
 	return (bool);
 }
 
-static int	ft_discover(t_map **map)
+static int	ft_discover(t_map **map, int lvl)
 {
 	size_t	x;
 	size_t	y;
@@ -79,13 +79,13 @@ static int	ft_discover(t_map **map)
 
 	y = 0;
 	bool = TRUE;
-	while (y < WIDTH)
+	while (y < ft_getvalue(lvl, FALSE, TRUE))
 	{
 		x = 0;
-		while (x < LENGHT)
+		while (x < ft_getvalue(lvl, TRUE, FALSE))
 			if ((*map)->mine[y][x++] == MINE)
 			{
-				if (ft_discover_mine(&(*map), x - 1, y) == FALSE)
+			  if (ft_discover_mine(&(*map), x - 1, y, lvl) == FALSE)
 					bool = FALSE;
 				else
 					(*map)->hide[y][x - 1] = FALSE;
@@ -105,47 +105,47 @@ static int	ft_end(char bool)
 	return (FALSE);
 }
 
-static int	ft_algo_demin(t_cmd *cmd, t_map **map)
+static int	ft_algo_demin(t_cmd *cmd, t_map **map, int lvl)
 {
 	int		ret;
 
-	ret = ft_demin(&(*map), cmd->x, cmd->y, TRUE);
+	ret = ft_demin(&(*map), cmd->x, cmd->y, TRUE, lvl);
 	if (ret == DEF)
 	{
-		ft_display(*map);
+	  ft_display(*map, lvl);
 		ft_putendl("Vous avez perdu!");
 		return (TRUE);
 	}
 	if (ret == ERROR)
 	{
-		ft_display(*map);
+	  ft_display(*map, lvl);
 		ft_putendl("Cette position n'existe pas!");
 		return (FALSE);
 	}
 	if (ret == TRUE)
-		if ((ret = ft_discover(&(*map))) == FALSE)
+	  if ((ret = ft_discover(&(*map), lvl)) == FALSE)
 		{
-			ft_display(*map);
+		  ft_display(*map, lvl);
 			return (FALSE);
 		}
-	ft_display(*map);
+	ft_display(*map, lvl);
 	return (ft_end(ret));
 }
 
-static void	ft_algo_drap(t_cmd *cmd, t_map **map)
+static void	ft_algo_drap(t_cmd *cmd, t_map **map, int lvl)
 {
-	if (cmd->y < WIDTH && cmd->x < LENGHT)
+	if (cmd->y < ft_getvalue(lvl, FALSE, TRUE) && cmd->x < ft_getvalue(lvl, TRUE, FALSE))
 		(*map)->flag[cmd->y][cmd->x] = ((*map)->flag[cmd->y][cmd->x] == FALSE) ? TRUE : FALSE;
 	else
 		ft_putendl("Cette position n'existe pas!");
 }
 
-int			ft_algo(t_cmd *cmd, t_map **map)
+int			ft_algo(t_cmd *cmd, t_map **map, int lvl)
 {
 	if (cmd->demin == TRUE)
-		return (ft_algo_demin(cmd, &(*map)));
+	  return (ft_algo_demin(cmd, &(*map), lvl));
 	else
-		ft_algo_drap(cmd, &(*map));
-	ft_display(*map);
+	  ft_algo_drap(cmd, &(*map), lvl);
+	ft_display(*map, lvl);
 	return (FALSE);
 }

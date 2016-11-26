@@ -36,23 +36,23 @@ static void	ft_putnbchar(char c, size_t nb)
 		ft_putchar(c);
 }
 
-void		ft_display(t_map *map)
+void		ft_display(t_map *map, int lvl)
 {
 	size_t	x;
 	size_t	y;
 
-	ft_putnbchar(' ', ft_nbdigit(WIDTH) + 1);
+	ft_putnbchar(' ', ft_nbdigit(ft_getvalue(lvl, FALSE, TRUE)) + 1);
 	ft_putchar('+');
-	ft_putnbchar('-', WIDTH);
+	ft_putnbchar('-', ft_getvalue(lvl, FALSE, TRUE));
 	ft_putstr("+\n");
 	y = 0;
-	while (y < WIDTH)
+	while (y < ft_getvalue(lvl, FALSE, TRUE))
 	{
 		x = 0;
 		ft_putnbr(y);
-		ft_putnbchar(' ', ft_nbdigit(WIDTH) - ft_nbdigit(y) + 1);
+		ft_putnbchar(' ', ft_nbdigit(ft_getvalue(lvl, FALSE, TRUE)) - ft_nbdigit(y) + 1);
 		ft_putchar('|');
-		while (x < LENGHT)
+		while (x < ft_getvalue(lvl, TRUE, FALSE))
 		{
 			if (map->flag[y][x] == TRUE)
 				ft_putchar('O');
@@ -69,27 +69,8 @@ void		ft_display(t_map *map)
 		ft_putstr("|\n");
 		y = y + 1;
 	}
-	ft_putnbchar(' ', ft_nbdigit(WIDTH) + 1);
+	ft_putnbchar(' ', ft_nbdigit(ft_getvalue(lvl, FALSE, TRUE)) + 1);
 	ft_putchar('+');
-	ft_putnbchar('-', WIDTH);
+	ft_putnbchar('-', ft_getvalue(lvl, FALSE, TRUE));
 	ft_putstr("+\n");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

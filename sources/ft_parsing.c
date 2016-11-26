@@ -33,8 +33,8 @@ static int	ft_init_cmd(t_cmd **cmd, char *line)
 		return (ERROR);
 	if (!tab[0] || !tab[1] || !tab[2])
 		return (ERROR);
-	(*cmd)->demin = (ft_strncmp(tab[0], "demin", 4) == 0) ? TRUE : FALSE;
-	if (((*cmd)->demin == FALSE) && (ft_strncmp(tab[0], "drap", 3) != 0))
+	(*cmd)->demin = (ft_strncmp(tab[0], "C", 0) == 0) ? TRUE : FALSE;
+	if (((*cmd)->demin == FALSE) && (ft_strncmp(tab[0], "D", 0) != 0))
 		return (ERROR);
 	(*cmd)->x = ft_atoi(tab[1]);
 	(*cmd)->y = ft_atoi(tab[2]);

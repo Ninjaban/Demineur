@@ -12,32 +12,45 @@
 
 #include "ft_demineur.h"
 
-int			ft_demineur(void)
+size_t			ft_getvalue(int lvl, int l, int w)
+{
+  if (lvl == 1)
+    return ((l == TRUE) ? LENGHT_1 : (w == TRUE) ? WIDTH_1 : DENSITY_1);
+  else if (lvl == 2)
+    return ((l == TRUE) ? LENGHT_2 : (w == TRUE) ? WIDTH_2 : DENSITY_2);
+  else if (lvl == 3)
+    return ((l == TRUE) ? LENGHT_3 : (w == TRUE) ? WIDTH_3 : DENSITY_3);
+  else
+    return ((l == TRUE) ? LENGHT_4 : (w == TRUE) ? WIDTH_4 : DENSITY_4);
+}
+
+int			ft_demineur(int lvl)
 {
 	t_cmd	*cmd;
 	t_map	*map;
 	char	*line;
 
 	cmd = NULL;
-	if ((map = ft_init()) == NULL)
+	if ((map = ft_init(lvl)) == NULL)
 		return (ERROR);
 	/* Code */
-	ft_display(map);
+	ft_display(map, lvl);
+	ft_putendl(USAGE);
 	while (42)
 	{
 		ft_putstr(PROMPT);
 		if (get_next_line(0, &line) == -1)
 		{
-			ft_freemap(map);
-			return (ERROR);
+		  ft_freemap(map, lvl);
+		  return (ERROR);
 		}
 		if (ft_parsing(&cmd, line) != ERROR)
 		{
-			if (ft_algo(cmd, &map) == TRUE)
+		  if (ft_algo(cmd, &map, lvl) == TRUE)
 			{
-				ft_freemap(map);
-				free(cmd);
-				return (TRUE);
+			  ft_freemap(map, lvl);
+			  free(cmd);
+			  return (TRUE);
 			}
 		}
 		else
